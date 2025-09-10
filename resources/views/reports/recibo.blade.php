@@ -128,7 +128,7 @@
     <table>
         <tr>
             <td>
-                <i>Son: {{ \NumerosEnLetras::convertir($sale->total,'Bolivianos',false) }}</i>
+                <i>Son: {{ \App\Helpers\NumerosEnLetras::convertir($sale->total,'Bolivianos',false) }}</i>
             </td>
             <td class="right">
                 @php

@@ -8,8 +8,8 @@ use App\Patrones\Permiso;
 use App\Repositories\UserRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use Flash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Response;
 
 class UserController extends AppBaseController
@@ -51,7 +51,7 @@ class UserController extends AppBaseController
     private function subirArchivo($file)
     {
         if (is_null($file)) {
-            Flash::error('Elija imagenes validas. (*.jpg | *.jpeg | *.png)');
+            return redirect()->back()->with('error', 'Elija imagenes validas. (*.jpg | *.jpeg | *.png)');
             return redirect(route('users.show'));
         }
         $nombreArchivo = time() . '.' . $file->getClientOriginalExtension();
@@ -71,7 +71,7 @@ class UserController extends AppBaseController
         try {
             $input = $request->all();
 
-            $input['password'] = \Hash::make($request->password);
+            $input['password'] = Hash::make($request->password);
             $input['alta'] = true;
             if (isset($input['foto_input']))
                 $input['fotografia'] = $this->subirArchivo($input['foto_input']);
@@ -80,7 +80,7 @@ class UserController extends AppBaseController
 
             $user = $this->userRepository->create($input);
 
-            Flash::success('User saved successfully.');
+            return redirect(route('users.index'))->with('success', 'User saved successfully.');
 
             return redirect(route('users.index'));
         } catch (\Exception $e) {
@@ -95,7 +95,7 @@ class UserController extends AppBaseController
         $this->authorize('show', $user);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            return redirect(route('users.index'))->with('error', 'User not found');
             return redirect(route('users.index'));
         }
 
@@ -114,7 +114,7 @@ class UserController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            return redirect(route('users.index'))->with('error', 'User not found');
 
             return redirect(route('users.index'));
         }
@@ -135,18 +135,18 @@ class UserController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            return redirect(route('users.index'))->with('error', 'User not found');
 
             return redirect(route('users.index'));
         }
 
         $input = $request->all();
-        $input['password'] = \Hash::make($request->password);
+        $input['password'] = Hash::make($request->password);
         if (isset($input['foto_input']))
             $input['fotografia'] = $this->subirArchivo($input['foto_input']);
         $user = $this->userRepository->update($input, $id);
 
-        Flash::success('User updated successfully.');
+        return redirect(route('users.index'))->with('success', 'User updated successfully.');
 
         return redirect(route('users.index'));
     }
@@ -165,14 +165,14 @@ class UserController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            return redirect(route('users.index'))->with('error', 'User not found');
 
             return redirect(route('users.index'));
         }
 
         $this->userRepository->delete($id);
 
-        Flash::success('User deleted successfully.');
+        return redirect(route('users.index'))->with('success', 'User deleted successfully.');
 
         return redirect(route('users.index'));
     }
@@ -185,7 +185,7 @@ class UserController extends AppBaseController
             $input['fotografia'] = $this->subirArchivo($input['foto_input']);
         $user = $this->userRepository->update($input, $id);
 
-        Flash::success('Actualizado correctamente!.');
+        return redirect()->back()->with('success', 'Actualizado correctamente!.');
 
         return redirect()->route('users.show', array('id' => $user->id));
     }
@@ -199,16 +199,16 @@ class UserController extends AppBaseController
         $user = $this->userRepository->find($id);
 
         $input = $request->all();
-        $input['password'] = \Hash::make($request->password);
+        $input['password'] = Hash::make($request->password);
 
         //verificando si la contrasena actual es la correcta
-        if (!\Hash::check($request->old_password, \Auth::user()->password)) {
-            Flash::error('El password actual no es la correcta!.');
+        if (!Hash::check($request->old_password, Auth::user()->password)) {
+            return redirect()->back()->with('error', 'El password actual no es la correcta!.');
             return redirect()->route('users.show', array('id' => $user->id));
         }
 
         $user = $this->userRepository->update($input, $id);
-        Flash::success('Actualizado correctamente!.');
+        return redirect()->back()->with('success', 'Actualizado correctamente!.');
         return redirect()->route('users.show', array('id' => $user->id));
     }
 }

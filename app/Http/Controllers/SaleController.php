@@ -6,11 +6,12 @@ use App\Http\Requests\CreateSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Client;
 use App\Models\Sale;
+use App\Models\Detail;
 use App\Patrones\Fachada;
 use App\Repositories\SaleRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use Flash;
+use Illuminate\Support\Facades\Auth;
 use Response;
 
 class SaleController extends AppBaseController
@@ -116,7 +117,7 @@ class SaleController extends AppBaseController
             $input['numero_ticket'] = $this->ultimo_ticket() + 1;
             $input['estado'] = true;
             $input['nit'] = trim($request->nit);
-            $input['users_id'] = \Auth::user()->id;
+            $input['users_id'] = Auth::user()->id;
 
             //si es cliente nuevo
             if(trim($request->clients_id) === "")
@@ -147,7 +148,7 @@ class SaleController extends AppBaseController
         $sale = $this->saleRepository->find($id);
 
         if (empty($sale)) {
-            Flash::error('Sale not found');
+            return redirect(route('sales.index'))->with('error', 'Sale not found');
 
             return redirect(route('sales.index'));
         }
@@ -171,7 +172,7 @@ class SaleController extends AppBaseController
         $this->authorize('destroy', $sale);
 
         if (empty($sale)) {
-            Flash::error('Sale not found');
+            return redirect(route('sales.index'))->with('error', 'Sale not found');
 
             return redirect(route('sales.index'));
         }
@@ -180,9 +181,9 @@ class SaleController extends AppBaseController
         $sale->save();
 
         if($sale->estado)
-            Flash::success('Venta restablecida correctamente');
+            return redirect(route('sales.index'))->with('success', 'Venta restablecida correctamente');
         else
-            Flash::success('Venta anulada correctamente');
+            return redirect(route('sales.index'))->with('success', 'Venta anulada correctamente');
 
         return redirect(route('sales.index'));
     }

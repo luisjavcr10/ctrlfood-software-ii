@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Sale
@@ -75,7 +76,7 @@ class Sale extends Model
     public $appends = ['total'];
     public function getTotalAttribute()
     {
-        $total = \DB::select('select sum(precio * cantidad) as total from details where sales_id = ? group by sales_id', [$this->id]);
+        $total = DB::select('select sum(precio * cantidad) as total from details where sales_id = ? group by sales_id', [$this->id]);
         if(count($total))
             return $total[0]->total;
         else

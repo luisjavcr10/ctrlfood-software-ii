@@ -34,8 +34,8 @@ Route::get('/home', [HomeController::class, 'index']);
 
 Route::group(['middleware'=>'auth'], function(){
     Route::resource('users', UserController::class);
-    Route::put('users.update_foto/{id}',  ['as'=>'users.update_foto', 'uses'=>[UserController::class, 'updateFoto']]);
-    Route::put('users.update_password/{id}',  ['as'=>'users.update_password', 'uses'=>[UserController::class, 'updatePassword']]);
+    Route::put('users.update_foto/{id}', [UserController::class, 'updateFoto'])->name('users.update_foto');
+    Route::put('users.update_password/{id}', [UserController::class, 'updatePassword'])->name('users.update_password');
 
     Route::resource('products', ProductController::class);
     Route::get('product_list', [ProductController::class, 'product_list']);

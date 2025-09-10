@@ -64,9 +64,9 @@ class ClientController extends AppBaseController
 
         $client = $this->clientRepository->create($input);
 
-        Flash::success('Client saved successfully.');
+        return redirect(route('clients.index'))->with('success', 'Client saved successfully.');
 
-        return redirect(route('clients.index'));
+
     }
 
     /**
@@ -81,9 +81,7 @@ class ClientController extends AppBaseController
         $client = $this->clientRepository->find($id);
 
         if (empty($client)) {
-            Flash::error('Client not found');
-
-            return redirect(route('clients.index'));
+            return redirect(route('clients.index'))->with('error', 'Client not found');
         }
 
         return view('clients.edit')->with('client', $client);
@@ -102,16 +100,12 @@ class ClientController extends AppBaseController
         $client = $this->clientRepository->find($id);
 
         if (empty($client)) {
-            Flash::error('Client not found');
-
-            return redirect(route('clients.index'));
+            return redirect(route('clients.index'))->with('error', 'Client not found');
         }
 
         $client = $this->clientRepository->update($request->all(), $id);
 
-        Flash::success('Client updated successfully.');
-
-        return redirect(route('clients.index'));
+        return redirect(route('clients.index'))->with('success', 'Client updated successfully.');
     }
 
     /**
@@ -128,15 +122,11 @@ class ClientController extends AppBaseController
         $client = $this->clientRepository->find($id);
 
         if (empty($client)) {
-            Flash::error('Client not found');
-
-            return redirect(route('clients.index'));
+            return redirect(route('clients.index'))->with('error', 'Client not found');
         }
 
         $this->clientRepository->delete($id);
 
-        Flash::success('Client deleted successfully.');
-
-        return redirect(route('clients.index'));
+        return redirect(route('clients.index'))->with('success', 'Client deleted successfully.');
     }
 }
