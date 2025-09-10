@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_KEY=base64:your-app-key-here
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=ctrlfood
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+    volumes:
+      - storage_data:/var/www/storage
+    depends_on:
+      - db
+    networks:
+      - ctrlfood-network
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=ctrlfood
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ctrlfood-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - ctrlfood-network
+
+volumes:
+  postgres_data:
+  storage_data:
+
+networks:
+  ctrlfood-network:
+    driver: bridge
