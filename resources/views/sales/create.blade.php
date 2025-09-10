@@ -21,7 +21,15 @@
             </div>
 
             <div class="col-md-6">
-                @include('adminlte-templates::common.errors')
+                @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="list-unstyled">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="glyphicon glyphicon-shopping-cart"></i> Carrito de venta</h3>

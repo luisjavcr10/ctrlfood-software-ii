@@ -7,7 +7,15 @@
         </h1>
    </section>
    <div class="content">
-       @include('adminlte-templates::common.errors')
+       @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="list-unstyled">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
