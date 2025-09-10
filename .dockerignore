@@ -13,8 +13,10 @@ README.md
 !.env.example
 
 # Dependencies
-node_modules
-vendor
+node_modules/
+vendor/
+# composer.lock - necesario para composer install
+# package-lock.json - necesario para npm ci
 
 # IDE
 .vscode

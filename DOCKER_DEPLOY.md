@@ -116,6 +116,20 @@ En la configuración avanzada de Render:
 
 ## 🧪 Desarrollo Local con Docker
 
+### Preparación Previa
+
+```bash
+# 1. Generar archivos de dependencias
+composer install --no-dev
+npm install
+
+# 2. Compilar assets (opcional - ya incluidos en el proyecto)
+# npm run production
+
+# 3. Construir imagen
+docker build -t ctrlfood-app .
+```
+
 ### Usando Docker Compose
 
 ```bash
@@ -135,9 +149,6 @@ docker-compose down
 ### Usando Docker directamente
 
 ```bash
-# Construir imagen
-docker build -t ctrlfood-app .
-
 # Ejecutar contenedor
 docker run -p 8080:80 \
   -e APP_KEY=base64:tu-app-key \

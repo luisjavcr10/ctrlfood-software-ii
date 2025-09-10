@@ -42,13 +42,10 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 WORKDIR /var/www
 
 # Copiar archivos de dependencias primero (para aprovechar cache de Docker)
-COPY composer.json composer.lock package.json package-lock.json* ./
+COPY composer.json composer.lock ./
 
 # Instalar dependencias PHP
 RUN composer install --no-scripts --no-autoloader --no-dev --prefer-dist
-
-# Instalar dependencias Node.js
-RUN npm ci --only=production
 
 # Copiar el resto de archivos del proyecto
 COPY . .
@@ -60,8 +57,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Completar instalación de Composer
 RUN composer dump-autoload --no-dev --optimize
 
-# Compilar assets
-RUN npm run production
+# Nota: Los assets deben compilarse localmente antes del build
+# Ejecutar: npm run production antes de hacer docker build
 
 # Configurar Nginx
 COPY docker/nginx.conf /etc/nginx/sites-available/default
