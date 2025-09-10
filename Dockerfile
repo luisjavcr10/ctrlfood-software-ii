@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     supervisor \
-    nginx
+    nginx \
+    netcat-traditional
 
 # Limpiar cache de apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -50,9 +51,11 @@ RUN composer install --no-scripts --no-autoloader --no-dev --prefer-dist
 # Copiar el resto de archivos del proyecto
 COPY . .
 
-# Copiar y hacer ejecutable el entrypoint
+# Copiar y hacer ejecutables los scripts
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/configure-nginx.sh /usr/local/bin/configure-nginx.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/configure-nginx.sh
 
 # Completar instalación de Composer
 RUN composer dump-autoload --no-dev --optimize
@@ -88,8 +91,8 @@ ENV LOG_CHANNEL=stderr
 ENV RUN_MIGRATIONS=true
 ENV RUN_SEEDERS=false
 
-# Exponer puerto
-EXPOSE 80
+# Exponer puerto (Render usa PORT dinámico, por defecto 10000)
+EXPOSE ${PORT:-10000}
 
 # Establecer entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

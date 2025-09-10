@@ -4,10 +4,12 @@ set -e
 # Función para esperar a que la base de datos esté lista
 wait_for_db() {
     echo "Esperando a que la base de datos esté lista..."
-    while ! nc -z "$DB_HOST" "$DB_PORT"; do
-        sleep 1
-    done
-    echo "Base de datos lista!"
+    # Usar timeout para evitar esperas infinitas
+    timeout 60 bash -c 'until nc -z "$DB_HOST" "$DB_PORT"; do sleep 1; done' || {
+        echo "Advertencia: No se pudo conectar a la base de datos después de 60 segundos"
+        echo "Continuando con el inicio del servicio..."
+    }
+    echo "Verificación de base de datos completada!"
 }
 
 # Función para ejecutar comandos de Laravel
@@ -57,6 +59,10 @@ setup_laravel() {
 # Función principal
 main() {
     echo "Iniciando entrypoint..."
+    
+    # Configurar nginx con el puerto correcto
+    echo "Configurando nginx para puerto: ${PORT:-80}"
+    /usr/local/bin/configure-nginx.sh
     
     # Esperar a la base de datos si está configurada
     if [ -n "$DB_HOST" ] && [ -n "$DB_PORT" ]; then

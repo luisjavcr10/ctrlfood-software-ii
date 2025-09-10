@@ -130,6 +130,23 @@ npm install
 docker build -t ctrlfood-app .
 ```
 
+## Correcciones Aplicadas para Render
+
+Esta versión incluye las siguientes correcciones para resolver problemas de despliegue en Render:
+
+### ✅ Problema: `nc: command not found`
+- **Solución**: Instalado `netcat-traditional` en el Dockerfile
+- **Ubicación**: Línea de instalación de dependencias del sistema
+
+### ✅ Problema: Port binding timeout
+- **Solución**: Configuración dinámica de puerto usando variable `PORT`
+- **Implementación**: Script `configure-nginx.sh` que configura nginx dinámicamente
+- **Puerto por defecto**: 10000 (estándar de Render)
+
+### ✅ Problema: Timeout en conexión a base de datos
+- **Solución**: Timeout de 60 segundos en verificación de BD
+- **Comportamiento**: Continúa el inicio aunque no se conecte a la BD
+
 ### Usando Docker Compose
 
 ```bash
