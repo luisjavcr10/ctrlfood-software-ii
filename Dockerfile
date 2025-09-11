@@ -92,7 +92,7 @@ ENV RUN_MIGRATIONS=true
 ENV RUN_SEEDERS=false
 
 # Exponer puerto (Render usa PORT dinámico, por defecto 10000)
-EXPOSE ${PORT:-10000}
+EXPOSE $PORT
 
 # Establecer entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
