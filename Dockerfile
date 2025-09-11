@@ -63,11 +63,6 @@ RUN composer dump-autoload --no-dev --optimize
 # Nota: Los assets deben compilarse localmente antes del build
 # Ejecutar: npm run production antes de hacer docker build
 
-# Configurar Nginx
-COPY docker/nginx.conf /etc/nginx/sites-available/default
-RUN rm -f /etc/nginx/sites-enabled/default
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-
 # Configurar Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
