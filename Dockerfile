@@ -76,8 +76,8 @@ RUN mkdir -p /var/www/storage/framework/views
 
 # Configurar permisos
 RUN chown -R www:www /var/www
-RUN chmod -R 775 /var/www/storage
-RUN chmod -R 775 /var/www/bootstrap/cache
+RUN chmod -R 777 /var/www/storage
+RUN chmod -R 777 /var/www/bootstrap/cache
 
 # Variables de entorno por defecto
 ENV APP_ENV=production
