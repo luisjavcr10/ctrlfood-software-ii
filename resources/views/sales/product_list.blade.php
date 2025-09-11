@@ -10,7 +10,7 @@
             <strong href="javascript:void(0)" class="product-title">@{{ row.nombre }}</strong>
 
             <span class="fa-pull-right" style="margin-left: 10px;">
-                <button class="btn btn-success btn-sm" @click='agregarCarrito(row, row.id)'><i class="glyphicon glyphicon-chevron-right"></i>Añadir </button>
+                <button class="btn btn-success btn-sm" :id="'btn-agregar-' + row.id" :data-product-id="row.id"><i class="glyphicon glyphicon-chevron-right"></i>Añadir </button>
             </span>
 
             <h5 class="product-description">

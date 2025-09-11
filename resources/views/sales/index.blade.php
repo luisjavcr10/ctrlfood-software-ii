@@ -51,17 +51,28 @@
 
 @section('scripts')
     <script>
+        // Función para manejar los reportes sin Vue.js template compilation
+        function print_report(route) {
+            var url = "{{ url('ruta') }}".replace('ruta', route);
+            $("#frmSearch").attr("action", url).submit();
+        }
+
+        // Event listeners para los botones
+        $(document).ready(function() {
+            $('#btn-sales').on('click', function() {
+                print_report('sales');
+            });
+            
+            $('#btn-reporte-economico').on('click', function() {
+                print_report('reporte_economico');
+            });
+        });
+
+        // Mantener Vue.js solo para otras funcionalidades que no requieran template compilation
         appSales = new Vue({
             el: "#appSales",
             data:{
                 isReport: false
-            },
-            methods:{
-                print_report(route){
-                    var url = "{{ url('ruta') }}".replace('ruta', route);
-                    $("#frmSearch").attr("action", url).submit();
-                    this.isReport = true;
-                }
             }
         });
     </script>

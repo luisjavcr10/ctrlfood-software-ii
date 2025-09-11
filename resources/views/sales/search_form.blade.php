@@ -30,8 +30,8 @@
         </div>
 
         <div class="form-group col-sm-3" style="margin-top: 25px">
-            <button type="button" class="btn btn-success" @click="print_report('sales')"><i class="glyphicon glyphicon-search"></i> Buscar</button>
-            <button type="button" class="btn btn-default" @click="print_report('reporte_economico')"><i class="glyphicon glyphicon-print" ></i> Reporte ecónomico</button>
+            <button type="button" class="btn btn-success" id="btn-sales"><i class="glyphicon glyphicon-search"></i> Buscar</button>
+            <button type="button" class="btn btn-default" id="btn-reporte-economico"><i class="glyphicon glyphicon-print" ></i> Reporte ecónomico</button>
         </div>
 
     </form>

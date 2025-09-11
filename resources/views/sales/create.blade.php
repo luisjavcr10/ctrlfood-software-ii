@@ -60,6 +60,7 @@
             },
             mounted() {
                 this.getProductos();
+                this.setupEventListeners();
             },
             methods: {
                 getProductos(){
@@ -176,6 +177,25 @@
                         let url = "{{ url('sale_delete/pid') }}".replace('pid', sale.id);
                         axios.delete(url);
                         alert(formarListaDeErrores(error.response.data.errors));
+                    });
+                },
+                setupEventListeners() {
+                    // Event delegation para botones de agregar al carrito
+                    $(document).on('click', '[id^="btn-agregar-"]', (e) => {
+                        const productId = parseInt($(e.currentTarget).attr('data-product-id'));
+                        const product = this.products.find(p => p.id === productId);
+                        if (product) {
+                            this.agregarCarrito(product, productId);
+                        }
+                    });
+                    
+                    // Event delegation para botones de eliminar del carrito
+                    $(document).on('click', '[id^="btn-eliminar-"]', (e) => {
+                        const index = parseInt($(e.currentTarget).attr('data-index'));
+                        const row = this.carrito[index];
+                        if (row) {
+                            this.eliminarItemCarrito(row, index);
+                        }
                     });
                 },
             },

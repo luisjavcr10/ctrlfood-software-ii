@@ -16,7 +16,7 @@
             <td>@{{ row.nombre }}</td>
             <td>@{{ row.precio }}</td>
             <td class="text-right">@{{ Math.round((row.precio * row.cantidad) * 100) / 100 }}</td>
-            <td><button class="btn btn-xs btn-danger" title="Eliminar" @click="eliminarItemCarrito(row, index)"><i class="glyphicon glyphicon-trash"></i></button></td>
+            <td><button class="btn btn-xs btn-danger" title="Eliminar" :id="'btn-eliminar-' + index" :data-index="index"><i class="glyphicon glyphicon-trash"></i></button></td>
         </tr>
         <tr>
             <td colspan="3" class="text-right"><strong>Total [Bs]:</strong></td>
