@@ -54,6 +54,7 @@ COPY . .
 # Copiar y hacer ejecutables los scripts
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY docker/configure-nginx.sh /usr/local/bin/configure-nginx.sh
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.conf
 RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/configure-nginx.sh
 
@@ -68,7 +69,10 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Crear directorios necesarios
 RUN mkdir -p /var/log/supervisor
+RUN mkdir -p /var/log
 RUN mkdir -p /run/php
+RUN mkdir -p /var/lib/php/sessions
+RUN mkdir -p /var/lib/php/wsdlcache
 RUN mkdir -p /var/www/storage/logs
 RUN mkdir -p /var/www/storage/framework/cache
 RUN mkdir -p /var/www/storage/framework/sessions
@@ -76,6 +80,9 @@ RUN mkdir -p /var/www/storage/framework/views
 
 # Configurar permisos
 RUN chown -R www:www /var/www
+RUN chown -R www-data:www-data /var/lib/php
+RUN chmod -R 755 /var/lib/php
+RUN chmod -R 777 /var/log
 RUN chmod -R 777 /var/www/storage
 RUN chmod -R 777 /var/www/bootstrap/cache
 
