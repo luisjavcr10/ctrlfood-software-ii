@@ -34,8 +34,8 @@ http {
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
-    gzip_proxied expired no-cache no-store private must-revalidate auth;
-    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss;
+    gzip_proxied any;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/json;
     gzip_disable "MSIE [1-6]";
 
     server {
@@ -73,7 +73,7 @@ http {
         # Cache static assets
         location ~* \.(jpg|jpeg|png|gif|ico|css|js|pdf|txt)\$ {
             expires 1y;
-            add_header Cache-Control "public, immutable";
+            add_header Cache-Control "public, max-age=31536000, immutable";
         }
 
         # Deny access to sensitive files
