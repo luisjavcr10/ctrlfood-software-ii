@@ -60,6 +60,11 @@ setup_laravel() {
 main() {
     echo "Iniciando entrypoint..."
     
+    # Configurar permisos de storage y bootstrap
+    echo "Configurando permisos..."
+    chown -R www:www /var/www/storage /var/www/bootstrap/cache
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+    
     # Configurar nginx con el puerto correcto
     echo "Configurando nginx para puerto: ${PORT:-80}"
     /usr/local/bin/configure-nginx.sh
